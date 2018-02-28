@@ -38,6 +38,7 @@ public partial class MainWindow
 		// Container child vpaned1.Gtk.Paned+PanedChild
 		this.hpaned1 = new global::Gtk.HPaned();
 		this.hpaned1.CanFocus = true;
+		this.hpaned1.Name = "hpaned1";
 		this.hpaned1.Position = 522;
 		// Container child hpaned1.Gtk.Paned+PanedChild
 		this.vpaned4 = new global::Gtk.VPaned();
