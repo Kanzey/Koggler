@@ -38,10 +38,8 @@ public partial class MainWindow : Gtk.Window
 
     public void InitTreeView()
     {
-        store = CreateModel(1);
-        treeview1.Model = store;
         treeview1.RulesHint = true;
-        treeview1.SearchColumn = (int)Column.Duration;
+        treeview1.SearchColumn = 0;
         AddColumns(treeview1);
     }
 
@@ -96,9 +94,9 @@ public partial class MainWindow : Gtk.Window
         {
             Task t = new Task(DateTime.Now.Ticks, taskCombobox.ActiveText, stopwatch.ElapsedTicks);
             dbManager.addEntry(t);
+            updateTreeView();
             Clock.Stop();
             stopwatch.Reset();
-            store.AppendValues(t);
             taskCombobox.Sensitive = true;
             time.Text = "00:00:00";
             changeElementColor(startButton, startColor);
@@ -128,21 +126,25 @@ public partial class MainWindow : Gtk.Window
         CellRendererText rendererText;
 
         rendererText = new CellRendererText();
-        column = new TreeViewColumn("Date", rendererText, "text", Column.Date);
-        column.SortColumnId = (int)Column.Date;
+        column = new TreeViewColumn();
+        column.Title = "Date";
+        column.SortColumnId = 0;
+        column.PackStart( rendererText, true);
         column.SetCellDataFunc(rendererText, new Gtk.TreeCellDataFunc(RenderDate));
         treeView.AppendColumn(column);
 
 
         rendererText = new CellRendererText();
-        column = new TreeViewColumn("Task", rendererText, "text", Column.Name);
-        column.SortColumnId = (int)Column.Name;
+        column = new TreeViewColumn();
+        column.Title = "Task";
+        column.PackStart(rendererText, true);
         column.SetCellDataFunc(rendererText, new Gtk.TreeCellDataFunc(RenderText));
         treeView.AppendColumn(column);
 
         rendererText = new CellRendererText();
-        column = new TreeViewColumn("Duration", rendererText, "text", Column.Duration);
-        column.SortColumnId = (int)Column.Duration;
+        column = new TreeViewColumn();
+        column.Title = "Duration";
+        column.PackStart(rendererText, true);
         column.SetCellDataFunc(rendererText, new Gtk.TreeCellDataFunc(RenderDurration));
         treeView.AppendColumn(column);
     }
@@ -165,7 +167,14 @@ public partial class MainWindow : Gtk.Window
         (cell as Gtk.CellRendererText).Text = task.Duration.ToString("HH:mm:ss");
     }
 
-    private ListStore CreateModel(int days)
+    private void updateTreeView(){
+        TreeIter iter;
+        timeCombobox.GetActiveIter(out iter);
+        store = CreateModel((int)timeCombobox.Model.GetValue(iter, 1), timeCheckbutton.Active);
+        treeview1.Model = store;
+    }
+
+    private ListStore CreateModel(int days, bool sum)
     {
         ListStore store = new ListStore(typeof(Task));
         store.SetSortFunc(0, (model, a, b) => {
@@ -173,19 +182,13 @@ public partial class MainWindow : Gtk.Window
             Task tb = (Task)model.GetValue(b, 0);
             return ta.Date.CompareTo(tb.Date);
         });
-        foreach (Task task in dbManager.getEntries(days)){
+        foreach (Task task in dbManager.getEntries(days, sum)){
             store.AppendValues(task);
         }
         store.SetSortColumnId(0,SortType.Descending);
         return store;
     }
 
-    private enum Column
-    {
-        Date,
-        Name,
-        Duration
-    }
 
 
     public class Task
@@ -205,7 +208,12 @@ public partial class MainWindow : Gtk.Window
     protected void OnTimeComboboxChanged(object sender, EventArgs e)
     {
         if(sender == timeCombobox){
-            
+            updateTreeView();
         }
+    }
+
+    protected void OnTimeCheckbuttonToggled(object sender, EventArgs e)
+    {
+        updateTreeView();
     }
 }

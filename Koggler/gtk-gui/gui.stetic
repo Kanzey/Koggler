@@ -7,7 +7,7 @@
     <widget-library name="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <widget-library name="../bin/Debug/Koggler.exe" internal="true" />
   </import>
-  <widget class="Gtk.Window" id="MainWindow" design-size="649 300">
+  <widget class="Gtk.Window" id="MainWindow" design-size="640 300">
     <property name="MemberName" />
     <property name="Title" translatable="yes">MainWindow</property>
     <property name="WindowPosition">CenterOnParent</property>
@@ -54,11 +54,32 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="Gtk.ComboBox" id="timeCombobox">
+                  <widget class="Gtk.HPaned" id="hpaned2">
                     <property name="MemberName" />
-                    <property name="IsTextCombo">True</property>
-                    <property name="Items" translatable="yes" />
-                    <signal name="Changed" handler="OnTimeComboboxChanged" />
+                    <property name="CanFocus">True</property>
+                    <property name="Position">422</property>
+                    <child>
+                      <widget class="Gtk.ComboBox" id="timeCombobox">
+                        <property name="MemberName" />
+                        <property name="IsTextCombo">True</property>
+                        <property name="Items" translatable="yes" />
+                        <signal name="Changed" handler="OnTimeComboboxChanged" />
+                      </widget>
+                      <packing>
+                        <property name="Resize">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="Gtk.CheckButton" id="timeCheckbutton">
+                        <property name="MemberName" />
+                        <property name="CanFocus">True</property>
+                        <property name="Label" translatable="yes">Total time</property>
+                        <property name="DrawIndicator">True</property>
+                        <property name="HasLabel">True</property>
+                        <property name="UseUnderline">True</property>
+                        <signal name="Toggled" handler="OnTimeCheckbuttonToggled" />
+                      </widget>
+                    </child>
                   </widget>
                 </child>
               </widget>
@@ -67,13 +88,20 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Button" id="startButton">
+              <widget class="Gtk.Alignment" id="alignment2">
                 <property name="MemberName" />
-                <property name="CanFocus">True</property>
-                <property name="Type">TextOnly</property>
-                <property name="Label" translatable="yes">Start</property>
-                <property name="UseUnderline">True</property>
-                <signal name="Clicked" handler="OnStartButtonClicked" />
+                <property name="LeftPadding">5</property>
+                <property name="RightPadding">5</property>
+                <child>
+                  <widget class="Gtk.Button" id="startButton">
+                    <property name="MemberName" />
+                    <property name="CanFocus">True</property>
+                    <property name="Type">TextOnly</property>
+                    <property name="Label" translatable="yes">Start</property>
+                    <property name="UseUnderline">True</property>
+                    <signal name="Clicked" handler="OnStartButtonClicked" />
+                  </widget>
+                </child>
               </widget>
             </child>
           </widget>

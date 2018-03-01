@@ -64,6 +64,32 @@ namespace Koggler
             return l;
         }
 
+        public List<MainWindow.Task> getEntries(int days, bool sum)
+        {
+            if (sum)
+                return getAccEntries(days);
+            else
+                return getEntries(days);
+        }
+
+        public List<MainWindow.Task> getAccEntries(int days){
+            List<MainWindow.Task> l = new List<MainWindow.Task>();
+            string stm = "Select min(date), task, sum(time) From entry";
+            if (days != 0)
+                stm += " where date >= " + DateTime.Now.AddDays(-days).Ticks.ToString();
+            stm += " Group by task";
+
+            using (SQLiteCommand cmd = new SQLiteCommand(stm, dbConnection))
+            {
+                using (SQLiteDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                        l.Add(new MainWindow.Task(dr.GetInt64(0), dr.GetString(1), dr.GetInt64(2)));
+                }
+            }
+            return l;
+        }
+
         public List<MainWindow.Task> getEntries(int days){
             List<MainWindow.Task> l = new List<MainWindow.Task>();
             string stm = "Select * From entry";
