@@ -23,7 +23,6 @@ public partial class MainWindow : Gtk.Window
     private void InitComponents(){
         InitButton();
         InitTreeView();
-        InitTaskCombobox();
         InitTimeCombobox();
     }
 
@@ -172,6 +171,7 @@ public partial class MainWindow : Gtk.Window
         timeCombobox.GetActiveIter(out iter);
         store = CreateModel((int)timeCombobox.Model.GetValue(iter, 1), timeCheckbutton.Active);
         treeview1.Model = store;
+        InitTaskCombobox();
     }
 
     private ListStore CreateModel(int days, bool sum)
