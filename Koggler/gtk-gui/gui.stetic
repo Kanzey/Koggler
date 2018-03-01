@@ -58,6 +58,7 @@
                     <property name="MemberName" />
                     <property name="IsTextCombo">True</property>
                     <property name="Items" translatable="yes" />
+                    <signal name="Changed" handler="OnTimeComboboxChanged" />
                   </widget>
                 </child>
               </widget>

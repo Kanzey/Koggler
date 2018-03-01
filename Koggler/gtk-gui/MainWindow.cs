@@ -100,6 +100,7 @@ public partial class MainWindow
 		this.DefaultHeight = 300;
 		this.Show();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler(this.OnDeleteEvent);
+		this.timeCombobox.Changed += new global::System.EventHandler(this.OnTimeComboboxChanged);
 		this.startButton.Clicked += new global::System.EventHandler(this.OnStartButtonClicked);
 	}
 }

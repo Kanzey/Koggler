@@ -50,9 +50,25 @@ namespace Koggler
             }
         }
 
-        public List<MainWindow.Task> getEntries(){
+        public List<String> getTasks(){
+            List<String> l = new List<String>();
+            string stm = "Select distinct task From entry";
+            using (SQLiteCommand cmd = new SQLiteCommand(stm, dbConnection))
+            {
+                using (SQLiteDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                        l.Add(dr.GetString(0));
+                }
+            }
+            return l;
+        }
+
+        public List<MainWindow.Task> getEntries(int days){
             List<MainWindow.Task> l = new List<MainWindow.Task>();
             string stm = "Select * From entry";
+            if (days != 0)
+                stm += " where date >= " + DateTime.Now.AddDays(-days).Ticks.ToString() + ";";
             using (SQLiteCommand cmd = new SQLiteCommand(stm, dbConnection)){
                 using(SQLiteDataReader dr = cmd.ExecuteReader()){
                     while(dr.Read())
